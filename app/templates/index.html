@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Clasificador de Hojas</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Clasificador de Enfermedades en Hojas</h1>
+
+        <form id="upload-form">
+            <input type="file" id="file-input" accept="image/*" required />
+            <button type="submit">Predecir</button>
+        </form>
+
+        <div id="preview"></div>
+
+        <div id="result" class="hidden">
+            <h2>Resultado</h2>
+            <p id="class-name"></p>
+            <p id="confidence"></p>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
