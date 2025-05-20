@@ -96,7 +96,7 @@ if selected == "Clasificador":
         
         # Preprocesar y predecir
         img_batch = preprocess_image_pil(image)
-        preds = model.predict(img_batch)
+        preds = new_model.predict(img_batch)
         
         # Obtener resultados
         class_idx = int(np.argmax(preds))
