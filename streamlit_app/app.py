@@ -9,7 +9,8 @@ import pandas as pd
 # --- Configuración ----------------------------------------------------------
 IMG_SIZE = 224
 CATEGORIES = ["Anthracnose", "Bacterial Blight", "Citrus Canker", "Curl Virus", "Deficiency Leaf", "Dry Leaf", "Healthy Leaf", "Sooty Mould", "Spider Mites"]
-MODEL_PATH = "../cnn_hojas_hiperparametros.h5"
+MODEL_PATH = "../old_model.h5"
+NEW_MODEL_PATH = "../new_model.h5"
 
 # Configuración de la página
 st.set_page_config(
@@ -27,7 +28,12 @@ st.write("Sube una imagen de una hoja para clasificarla")
 def load_ml_model():
     return load_model(MODEL_PATH)
 
+@st.cache_resource
+def load_new_ml_model():
+    return load_model(NEW_MODEL_PATH)
+
 model = load_ml_model()
+new_model = load_new_ml_model()
 
 def preprocess_image_pil(pil_img: Image.Image) -> np.ndarray:
     # Convertir PIL → OpenCV BGR
