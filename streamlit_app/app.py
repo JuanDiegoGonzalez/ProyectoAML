@@ -8,6 +8,7 @@ import pandas as pd
 import glob
 from streamlit_option_menu import option_menu
 import altair as alt
+from disease_descriptions import DISEASE_DESCRIPTIONS
 
 # --- Configuración ----------------------------------------------------------
 IMG_SIZE = 224
@@ -17,7 +18,7 @@ CATEGORIES_TRANSLATION = {
     "Bacterial Blight": "Tizón Bacteriano",
     "Citrus Canker": "Cáncer Cítrico",
     "Curl Virus": "Virus del Enrollamiento",
-    "Deficiency Leaf": "Hoja con Deficiencia",
+    "Deficiency Leaf": "Hoja con Deficiencia de Nutrientes",
     "Dry Leaf": "Hoja Seca",
     "Healthy Leaf": "Hoja Sana",
     "Sooty Mould": "Moho Negro",
@@ -107,7 +108,6 @@ if selected == "Clasificador":
         st.subheader("Resultados")
         st.write(f"Clase predicha: {class_name_translated}")
         st.write(f"Confianza: {confidence:.2%}")
-        
         # Crear DataFrame para el gráfico
         probs_df = pd.DataFrame({
             'Clase': [CATEGORIES_TRANSLATION[cat] for cat in CATEGORIES],
@@ -123,8 +123,11 @@ if selected == "Clasificador":
         # Columna izquierda: Probabilidades con barras de progreso
         with col1:
             st.subheader("Probabilidades por clase")
-            for i, category in enumerate(CATEGORIES):
-                prob = float(preds[0][i])
+            # Crear lista de tuplas (categoría, probabilidad) y ordenar por probabilidad
+            probs_list = [(cat, float(preds[0][i])) for i, cat in enumerate(CATEGORIES)]
+            probs_list.sort(key=lambda x: x[1], reverse=True)
+            # Mostrar probabilidades ordenadas
+            for category, prob in probs_list:
                 st.write(f"{CATEGORIES_TRANSLATION[category]}: {prob:.2%}")
                 st.progress(prob)
         
@@ -161,6 +164,10 @@ elif selected == "Galería":
     for tab, disease in zip(tabs, disease_folders):
         with tab:
             st.subheader(CATEGORIES_TRANSLATION[disease])
+            
+            # Mostrar descripción de la enfermedad
+            st.markdown(DISEASE_DESCRIPTIONS[disease])
+            st.markdown("---")
             
             # Obtener todas las imágenes en la carpeta de la enfermedad
             image_paths = glob.glob(os.path.join("images", disease, "*.*"))
